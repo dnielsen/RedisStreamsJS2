@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link href="css/common.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <div class="container">
+      <div class="page-header"><h2>Streaming tweets with Node.js + Redis Streams</h2></div>
+    </div>
+  </head>
+  <body>
+    <form class="form">
+        <div class="input-group">
+            <input type="text" class="form-control search-txt" placeholder="Search for a hashtag on Twitter..." value="#trump" />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-success btn-search">Start streaming</button>
+                <!-- <input type="button" onclick="CreateTableFromJSON()" value="Create Table From JSON" />
+                <p id="showData"></p> -->
+            </span>
+
+        </div>
+        <div id="tweets_area"></div>
+            <!-- <table>
+              <tr>
+                <th>User</th>
+                <th>Tweet</th>
+                <th>Mentions</th>
+                <th>Urls</th> 
+                <data-repeater data-values='[{"label": "Item 1", "id":1}, {"label": "Item 2", "id": 2}]'>
+                    <tr>
+                      <td id="${id}">${label}</td>
+                      <td id="${id}">${label}</td>
+                      <td id="${id}">${label}</td>
+                      <td id="${id}">${label}</td>                      
+                    </tr> 
+                </data-repeater>                 
+              </tr>
+            </table> -->
+        </div>
+      </form>   
+    <!-- <script> -->
+
+    <div id="output"></div>
+    <script language="javascript" type="text/javascript">
+        // var ws = new WebSocket('ws://localhost:4000/tweet-data');
+        // var websocket = new WebSocket('ws://localhost:4000/tweets');
+        var form = document.querySelector('.form');
+
+    //     ws.onopen = function () {
+    //       console.log('Opened Connection');
+    //       writeToScreen("CONNECTED");
+    //       writeToScreen("SENT: WebSocket rocks");
+    //       websocket.send(message);
+
+
+    //       // var msg = JSON.stringify({message: 'Hello'});
+    //       // ws.send(msg);
+    //     };
+
+    //     ws.onmessage = function(event) {
+    //       // var response = event.data;
+    //       // console.log(event.data);
+    //       console.log('Data from server');
+
+    //       writeToScreen('<span style="color: blue;">RESPONSE: ' + event.data+'</span>');
+    // websocket.close();
+    //       // CreateTableFromJSON(response);
+    //     };
+
+    //     ws.close = function() {
+    //         console.log('Closed Connection');
+    //         writeToScreen("DISCONNECTED");
+    //     };
+
+
+
+  var output;
+
+function init()
+{
+  output = document.getElementById("output");
+  testWebSocket();
+}
+
+function testWebSocket()
+{
+  websocket = new WebSocket('ws://localhost:4000/tweets');
+  websocket.onopen = function(evt) { onOpen(evt) };
+  websocket.onclose = function(evt) { onClose(evt) };
+  websocket.onmessage = function(evt) { onMessage(evt) };
+  websocket.onerror = function(evt) { onError(evt) };
+}
+
+function onOpen(evt)
+{
+  writeToScreen("CONNECTED");
+  doSend({ message:"websocket rocks" });
+}
+
+function onClose(evt)
+{
+  writeToScreen("DISCONNECTED");
+}
+
+function onMessage(evt)
+{
+   var data = JSON.parse(evt.data);
+  console.log(" ***** data recieved from the server ",data );
+
+
+
+  writeToScreen('<span style="color: blue;">RESPONSE: ' + data.id+'</span>');
+  // websocket.close();
+}
+
+function onError(evt)
+{
+   writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
+}
+
+function doSend(message)
+{
+  writeToScreen("SENT: Message" );
+  websocket.send(JSON.stringify(message));
+}
+
+function writeToScreen(message)
+{
+  var pre = document.createElement("p");
+  if(typeof pre !=="undefined") {
+    pre.style.wordWrap = "break-word";
+    pre.innerHTML = message;
+    output.appendChild(pre);
+  }  
+}
+
+window.addEventListener("load", init, false);
+
+    </script>  
+    <script> src="client.js"</script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <div id="root"></div>
+  </body>
+</html>
+
+
+
+
+
+
+
